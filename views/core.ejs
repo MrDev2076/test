@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkwise</title>
+    <link rel="shortcut icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXjceAz3yAZ5Wt_1xqDxOWgOnVd9TVsfb7AH6bO3W-_JZ23xEBIPArcVdc0igqAg3CMfQ&usqp=CAU" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .form{
+            background-image: linear-gradient(to top, #869191 -10%, #33312a 100%);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-800 flex items-center justify-center min-h-screen">
+
+    <div class="flex gap-8">
+
+   
+        <div class="bg-white p-6 rounded-lg shadow-md w-96">
+            <h2 class="text-xl font-semibold mb-4 text-center">Upload Car Image</h2>
+            <input type="file" id="fileInput" class="mb-4 w-full border p-2 rounded">
+            <button onclick="uploadImage()" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                Scan Number Plate
+            </button>
+            <div id="result" class="mt-4 text-center font-medium"></div>
+        </div>
+    
+        <script>
+            async function uploadImage() {
+                const fileInput = document.getElementById("fileInput");
+                if (!fileInput.files.length) {
+                    alert("Please select an image");
+                    return;
+                }
+    
+                const formData = new FormData();
+                formData.append("carImage", fileInput.files[0]);
+    
+                const response = await fetch("http://localhost:5000/upload", {
+                    method: "POST",
+                    body: formData
+                });
+    
+                const data = await response.json();
+                document.getElementById("result").innerHTML = `
+                    <p class="text-green-600">Detected Plate: <b>${data.licensePlate}</b></p>
+                   
+                `;
+            }
+        </script>
+</body>
+</html>
